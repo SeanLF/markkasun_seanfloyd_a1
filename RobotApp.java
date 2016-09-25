@@ -52,13 +52,36 @@ public class RobotApp {
     }
 
     private static ArrayList<String> search(int searchType, Grid grid) {
-        return new ArrayList<String>();
+        ArrayList<String> solution;
+        switch (searchType) {
+          case 2:
+            solution = breadthFirstSearch(grid);
+            break;
+          case 3:
+            solution = aStarSearch(grid);
+            break;
+          default:
+            solution = depthFirstSearch(grid);
+        }
+        return solution;
     }
 
     private static void printSolution(ArrayList<String> solution){
         for (String line : solution) {
             System.out.println(line);
         }
+    }
+
+    private static ArrayList<String> depthFirstSearch(Grid grid) {
+      return new ArrayList<String>();
+    }
+
+    private static ArrayList<String> breadthFirstSearch(Grid grid) {
+      return new ArrayList<String>();
+    }
+
+    private static ArrayList<String> aStarSearch(Grid grid) {
+      return new ArrayList<String>();
     }
 
     public static class Grid {
