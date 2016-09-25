@@ -12,10 +12,8 @@ public class RobotApp {
      */
 
     private static final int DEFAULT_GRID_SIZE = 4, DEFAULT_SEARCH_TYPE = 1;
-    private static final HashSet<Coordinate> DEFAULT_OBSTACLE_POSITIONS = new HashSet<Coordinate>();
-    private static final HashSet<Coordinate> DEFAULT_DIRT_POSITIONS = new HashSet<Coordinate>();
-    private static final Coordinate DEFAULT_ROBOT_POSITION = new Coordinate(0, 0);
-    private static final Orientation DEFAULT_ROBOT_ORIENTATION = Orientation.EAST;
+    private static final Coordinate DEFAULT_ROBOT_POSITION = new Coordinate(4, 3);
+    private static final Orientation DEFAULT_ROBOT_ORIENTATION = Orientation.WEST;
 
     public static void main(String[] args) {
         int gridSize, searchType;
@@ -24,16 +22,21 @@ public class RobotApp {
         Coordinate robotPosition;
         Orientation robotOrientation;
 
-        if (args[0] == null) {
+        if (args.length == 0) {
             gridSize = DEFAULT_GRID_SIZE;
             searchType = DEFAULT_SEARCH_TYPE;
-            obstaclePositions = DEFAULT_OBSTACLE_POSITIONS;
-            dirtPositions = DEFAULT_DIRT_POSITIONS;
+            obstaclePositions = generateDefaultObstaclePositions();
+            dirtPositions = generateDefaultDirtPositions();
             robotPosition = DEFAULT_ROBOT_POSITION;
             robotOrientation = DEFAULT_ROBOT_ORIENTATION;
         } else {
             gridSize = Integer.parseInt(args[0]);
             searchType = Integer.parseInt(args[1]);
+            //TODO Implement command line parsing;
+            obstaclePositions = generateDefaultObstaclePositions();
+            dirtPositions = generateDefaultDirtPositions();
+            robotPosition = DEFAULT_ROBOT_POSITION;
+            robotOrientation = DEFAULT_ROBOT_ORIENTATION;
         }
 
         Grid grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
@@ -129,5 +132,24 @@ public class RobotApp {
 
     public enum Orientation {
         NORTH, EAST, SOUTH, WEST
+    }
+    
+    private static HashSet<Coordinate> generateDefaultObstaclePositions() {
+        HashSet<Coordinate> result = new HashSet<Coordinate>();
+        result.add(new Coordinate(2,2));
+        result.add(new Coordinate(2,3));
+        result.add(new Coordinate(3,2));
+        
+        return result;
+    }
+    
+    private static HashSet<Coordinate> generateDefaultDirtPositions() {
+        HashSet<Coordinate> result = new HashSet<Coordinate>();
+        result.add(new Coordinate(2,1));
+        result.add(new Coordinate(1,2));
+        result.add(new Coordinate(2,4));
+        result.add(new Coordinate(3,3));
+        
+        return result;
     }
 }
