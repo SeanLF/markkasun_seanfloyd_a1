@@ -18,8 +18,7 @@ public class RobotApp {
     private static final Orientation DEFAULT_ROBOT_ORIENTATION = Orientation.WEST;
     public static final Actions[] actionArray = {Actions.SUCK, Actions.MOVE, Actions.RIGHT, Actions.LEFT};
 
-    //TODO: Handle exceptions
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         int gridSize, searchType;
         Set<Coordinate> obstaclePositions;
         HashSet<Coordinate> dirtPositions;
@@ -59,7 +58,7 @@ public class RobotApp {
         return new Grid(parent, gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 
-    private static ArrayList<String> search(int searchType, Grid grid) throws Exception {
+    private static ArrayList<String> search(int searchType, Grid grid) {
         ArrayList<String> solution;
         switch (searchType) {
           case 2:
@@ -84,14 +83,14 @@ public class RobotApp {
       return new ArrayList<String>();
     }
 
-    private static ArrayList<String> breadthFirstSearch(Grid grid) throws Exception {
+    private static ArrayList<String> breadthFirstSearch(Grid grid) {
         ArrayList<Grid> explored = new ArrayList<Grid>();
         Queue<Grid> frontier = new LinkedList<Grid>();
         frontier.add(grid);
         Grid node;
-        
+
         while (true) {
-            if (frontier.isEmpty()) break;//throw new Exception("No solution found");
+            if (frontier.isEmpty()) break;
             node = frontier.poll();
             explored.add(node);
             for (Actions action : actionArray) {
@@ -103,10 +102,10 @@ public class RobotApp {
                 }
             }
         }
-        
+
       return new ArrayList<String>();
     }
-    
+
     private static boolean isActionPossible(Grid node, Actions action) {
         switch (action) {
         case SUCK:
@@ -130,7 +129,7 @@ public class RobotApp {
             return true;
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private static Grid generateChildNode(Grid parent, Actions action) {
         HashSet<Coordinate> dirtPositions = parent.dirtPositions;
@@ -139,7 +138,7 @@ public class RobotApp {
         switch (action) {
         case SUCK:
             dirtPositions = (HashSet<Coordinate>)parent.dirtPositions.clone();
-            dirtPositions.remove(parent.robotPosition);
+            dirtPositions.remove(parent.robotPosition);break;
         case MOVE:
             switch (parent.robotOrientation) {
             case NORTH:
@@ -151,6 +150,7 @@ public class RobotApp {
             case WEST:
                 robotPosition = new Coordinate(parent.robotPosition.x - 1, parent.robotPosition.y);break;
             }
+            break;
         case RIGHT:
         case LEFT:
             if ((robotOrientation == Orientation.WEST && action == Actions.RIGHT)
@@ -198,14 +198,14 @@ public class RobotApp {
             this.robotPosition = robotPosition;
             this.robotOrientation = robotOrientation;
         }
-        
+
         @Override
         public boolean equals(Object o)
         {
             if (o instanceof Grid)
             {
               Grid grid = (Grid) o;
-              if (this.gridSize == grid.gridSize 
+              if (this.gridSize == grid.gridSize
                       && this.obstaclePositions.equals(grid.obstaclePositions)
                       && this.dirtPositions.equals(grid.dirtPositions)
                       && this.robotPosition.equals(grid.robotPosition)
@@ -240,27 +240,27 @@ public class RobotApp {
     public enum Orientation {
         NORTH, EAST, SOUTH, WEST
     }
-    
+
     public enum Actions {
         SUCK, MOVE, RIGHT, LEFT
     }
-    
+
     private static HashSet<Coordinate> generateDefaultObstaclePositions() {
         HashSet<Coordinate> result = new HashSet<Coordinate>();
         result.add(new Coordinate(2,2));
         result.add(new Coordinate(2,3));
         result.add(new Coordinate(3,2));
-        
+
         return result;
     }
-    
+
     private static HashSet<Coordinate> generateDefaultDirtPositions() {
         HashSet<Coordinate> result = new HashSet<Coordinate>();
         result.add(new Coordinate(2,1));
         result.add(new Coordinate(1,2));
         result.add(new Coordinate(2,4));
         result.add(new Coordinate(3,3));
-        
+
         return result;
     }
 }
