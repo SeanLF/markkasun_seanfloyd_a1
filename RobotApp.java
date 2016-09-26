@@ -118,14 +118,10 @@ public class RobotApp {
         case MOVE:
             Coordinate targetNodeCoord = null;
             switch (node.robotOrientation) {
-            case NORTH:
-                targetNodeCoord = new Coordinate(node.robotPosition.x, node.robotPosition.y - 1);break;
-            case EAST:
-                targetNodeCoord = new Coordinate(node.robotPosition.x + 1, node.robotPosition.y);break;
-            case SOUTH:
-                targetNodeCoord = new Coordinate(node.robotPosition.x, node.robotPosition.y + 1);break;
-            case WEST:
-                targetNodeCoord = new Coordinate(node.robotPosition.x - 1, node.robotPosition.y);break;
+            case NORTH: targetNodeCoord = new Coordinate(node.robotPosition.x, node.robotPosition.y - 1);break;
+            case EAST: targetNodeCoord = new Coordinate(node.robotPosition.x + 1, node.robotPosition.y);break;
+            case SOUTH: targetNodeCoord = new Coordinate(node.robotPosition.x, node.robotPosition.y + 1);break;
+            case WEST: targetNodeCoord = new Coordinate(node.robotPosition.x - 1, node.robotPosition.y);break;
             }
             boolean isWithinBounds = targetNodeCoord.x > 0 && targetNodeCoord.x <= node.gridSize
                     && targetNodeCoord.y > 0 && targetNodeCoord.y <= node.gridSize;
@@ -146,14 +142,10 @@ public class RobotApp {
             dirtPositions.remove(parent.robotPosition);break;
         case MOVE:
             switch (parent.robotOrientation) {
-            case NORTH:
-                robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y - 1);break;
-            case EAST:
-                robotPosition = new Coordinate(parent.robotPosition.x + 1, parent.robotPosition.y);break;
-            case SOUTH:
-                robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y + 1);break;
-            case WEST:
-                robotPosition = new Coordinate(parent.robotPosition.x - 1, parent.robotPosition.y);break;
+            case NORTH: robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y - 1);break;
+            case EAST: robotPosition = new Coordinate(parent.robotPosition.x + 1, parent.robotPosition.y);break;
+            case SOUTH: robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y + 1);break;
+            case WEST: robotPosition = new Coordinate(parent.robotPosition.x - 1, parent.robotPosition.y);break;
             }
             break;
         case RIGHT:
