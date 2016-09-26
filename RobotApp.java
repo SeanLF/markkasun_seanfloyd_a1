@@ -47,9 +47,10 @@ public class RobotApp {
         Coordinate robotPosition = INITIAL_ROBOT_POSITION;
         Orientation robotOrientation = INITIAL_ROBOT_ORIENTATION;
 
-        State grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
-        ArrayList<String> solution = search(searchType, grid);
-        printSolution(solution);
+        State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        Node initialNode = new Node(initialState, null, 0, null);
+        Node solution = search(searchType, initialNode);
+        printSolution(null);
     }
 
     private static State generateGrid(
@@ -62,17 +63,17 @@ public class RobotApp {
         return new State(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 
-    private static ArrayList<String> search(int searchType, State initialState) {
-        ArrayList<String> solution;
+    private static Node search(int searchType, Node initialNode) {
+        Node solution;
         switch (searchType) {
           case 2:
-            solution = breadthFirstSearch(initialState);
+            solution = breadthFirstSearch(initialNode);
             break;
           case 3:
-            solution = aStarSearch(initialState);
+            solution = aStarSearch(initialNode);
             break;
           default:
-            solution = depthFirstSearch(initialState);
+            solution = depthFirstSearch(initialNode);
         }
         return solution;
     }
@@ -83,35 +84,35 @@ public class RobotApp {
         }
     }
 
-    private static ArrayList<String> depthFirstSearch(State initialState) {
-      return new ArrayList<String>();
+    private static Node depthFirstSearch(Node initialNode) {
+      return null;
     }
 
-    private static ArrayList<String> breadthFirstSearch(State initialState) {
-        ArrayList<State> explored = new ArrayList<State>();
-        Queue<State> frontier = new LinkedList<State>();
-        frontier.add(initialState);
-        State node;
+    private static Node breadthFirstSearch(Node initialNode) {
+        ArrayList<Node> explored = new ArrayList<Node>();
+        Queue<Node> frontier = new LinkedList<Node>();
+        frontier.add(initialNode);
+        Node node;
 
         while (true) {
             if (frontier.isEmpty()) break;
             node = frontier.poll();
             explored.add(node);
             for (Actions action : actionArray) {
-                if (!isActionPossible(node, action)) continue;
-                State child = generateChildNode(node, action);
+                if (!isActionPossible(node.state, action)) continue;
+                Node child = generateChildNode(node, action);
                 if (!frontier.contains(child) && !explored.contains(child)) {
-                    if (child.dirtPositions.isEmpty()) return null; //TODO: Must return valid solution shite
+                    if (child.state.dirtPositions.isEmpty()) return null; //TODO: Must return valid solution shite
                     frontier.add(child);
                 }
             }
         }
 
-      return new ArrayList<String>();
+      return null;
     }
 
-    private static ArrayList<String> aStarSearch(State initialState) {
-      return new ArrayList<String>();
+    private static Node aStarSearch(Node initialNode) {
+      return null;
     }
 
     private static boolean isActionPossible(State node, Actions action) {
@@ -135,24 +136,31 @@ public class RobotApp {
     }
 
     @SuppressWarnings("unchecked")
-    private static State generateChildNode(State parent, Actions action) {
-        HashSet<Coordinate> dirtPositions = parent.dirtPositions;
-        Coordinate robotPosition = parent.robotPosition;
-        Orientation robotOrientation = parent.robotOrientation;
+    private static Node generateChildNode(Node parent, Actions action) {
+        State parentState = parent.state;
+        HashSet<Coordinate> dirtPositions = parentState.dirtPositions;
+        Coordinate robotPosition = parentState.robotPosition;
+        Orientation robotOrientation = parentState.robotOrientation;
+        int actionCost = 0;
+
         switch (action) {
         case SUCK:
-            dirtPositions = (HashSet<Coordinate>)parent.dirtPositions.clone();
-            dirtPositions.remove(parent.robotPosition);break;
+            dirtPositions = (HashSet<Coordinate>)parentState.dirtPositions.clone();
+            dirtPositions.remove(parentState.robotPosition);
+            actionCost = 10;
+            break;
         case MOVE:
-            switch (parent.robotOrientation) {
-            case NORTH: robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y - 1);break;
-            case EAST: robotPosition = new Coordinate(parent.robotPosition.x + 1, parent.robotPosition.y);break;
-            case SOUTH: robotPosition = new Coordinate(parent.robotPosition.x, parent.robotPosition.y + 1);break;
-            case WEST: robotPosition = new Coordinate(parent.robotPosition.x - 1, parent.robotPosition.y);break;
+            actionCost = 50;
+            switch (parentState.robotOrientation) {
+            case NORTH: robotPosition = new Coordinate(parentState.robotPosition.x, parentState.robotPosition.y - 1);break;
+            case EAST: robotPosition = new Coordinate(parentState.robotPosition.x + 1, parentState.robotPosition.y);break;
+            case SOUTH: robotPosition = new Coordinate(parentState.robotPosition.x, parentState.robotPosition.y + 1);break;
+            case WEST: robotPosition = new Coordinate(parentState.robotPosition.x - 1, parentState.robotPosition.y);break;
             }
             break;
         case RIGHT:
         case LEFT:
+            actionCost = 20;
             if ((robotOrientation == Orientation.WEST && action == Actions.RIGHT)
                     || (robotOrientation == Orientation.EAST && action == Actions.LEFT)) {
                 robotOrientation = Orientation.NORTH;
@@ -167,6 +175,7 @@ public class RobotApp {
                 robotOrientation = Orientation.WEST;
             }
         }
-        return new State(parent.gridSize, parent.obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        State newState = new State(parentState.gridSize, parentState.obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        return new Node(newState, action, actionCost, parent);
     }
 }
