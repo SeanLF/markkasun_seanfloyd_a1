@@ -1,5 +1,6 @@
 package markkasun_seanfloyd_a1;
 
+import java.util.List;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
@@ -50,7 +51,7 @@ public class RobotApp {
         State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         Node initialNode = new Node(initialState, null, 0, null);
         Node solution = search(searchType, initialNode);
-        printSolution(null);
+        printSolution(solution);
     }
 
     private static State generateGrid(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
@@ -66,10 +67,41 @@ public class RobotApp {
         }
     }
 
-    private static void printSolution(ArrayList<String> solution){
-        for (String line : solution) {
+    private static void printSolution(Node solution){
+        List<String> solutionString = generateSolutionString(solution);
+
+        for (String line : solutionString) {
             System.out.println(line);
         }
+    }
+
+    private static LinkedList<String> generateSolutionString(Node solutionNode) {
+      LinkedList<String> solutionString = new LinkedList<String>();
+      int cumulativeCost = 0, depth = 0;
+
+      do {
+        cumulativeCost += solutionNode.actionCost;
+        solutionString.addFirst(
+          String.format(
+            "pos(%d, %d), %s, %s",
+            solutionNode.state.robotPosition.x,
+            solutionNode.state.robotPosition.y,
+            solutionNode.state.robotOrientation,
+            solutionNode.action == null ? "START" : solutionNode.action
+          )
+        );
+        solutionNode = solutionNode.previousNode;
+
+      } while (solutionNode.previousNode != null);
+
+      if(solutionString.size() == 0) {
+        solutionString.add("No solution found :(");
+      } else {
+        depth = solutionString.size();
+        solutionString.addLast("");
+        solutionString.addLast(String.format("total cost: %d", cumulativeCost));
+        solutionString.addLast(String.format("Depth: %d", depth));
+      }
     }
 
     private static Node depthFirstSearch(Node initialNode) {
