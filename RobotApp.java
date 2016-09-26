@@ -79,30 +79,30 @@ public class RobotApp {
       LinkedList<String> solutionString = new LinkedList<String>();
       int cumulativeCost = 0, depth = 0;
 
-      do {
-        cumulativeCost += solutionNode.actionCost;
-        solutionString.addFirst(
-          String.format(
-            "pos(%d, %d), %s, %s",
-            solutionNode.state.robotPosition.x,
-            solutionNode.state.robotPosition.y,
-            solutionNode.state.robotOrientation,
-            solutionNode.action == null ? "START" : solutionNode.action
-          )
-        );
-        solutionNode = solutionNode.previousNode;
+      while(solutionNode != null) {
+          cumulativeCost += solutionNode.actionCost;
+          solutionString.addFirst(
+            String.format(
+              "pos(%d, %d), %s, %s",
+              solutionNode.state.robotPosition.x,
+              solutionNode.state.robotPosition.y,
+              solutionNode.state.robotOrientation,
+              solutionNode.action == null ? "START" : solutionNode.action
+            )
+          );
+          solutionNode = solutionNode.previousNode;
 
-      } while (solutionNode.previousNode != null);
+        }
 
-      if(solutionString.size() == 0) {
-        solutionString.add("No solution found :(");
-      } else {
-        depth = solutionString.size();
-        solutionString.addLast("");
-        solutionString.addLast(String.format("total cost: %d", cumulativeCost));
-        solutionString.addLast(String.format("Depth: %d", depth));
-      }
-      return solutionString;
+        if(solutionString.size() == 0) {
+          solutionString.add("No solution found :(");
+        } else {
+          depth = solutionString.size();
+          solutionString.addLast("");
+          solutionString.addLast(String.format("total cost: %d", cumulativeCost));
+          solutionString.addLast(String.format("Depth: %d", depth));
+        }
+        return solutionString;
     }
 
     private static Node depthFirstSearch(Node initialNode) {
