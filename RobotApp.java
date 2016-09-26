@@ -82,15 +82,14 @@ public class RobotApp {
         frontier.add(initialNode);
         Node node;
 
-        while (true) {
-            if (frontier.isEmpty()) break;
+        while (!frontier.isEmpty()) {
             node = frontier.poll();
             explored.add(node);
             for (Actions action : actionArray) {
                 if (!isActionPossible(node.state, action)) continue;
                 Node child = generateChildNode(node, action);
                 if (!frontier.contains(child) && !explored.contains(child)) {
-                    if (child.state.dirtPositions.isEmpty()) return null; //TODO: Must return valid solution shite
+                    if (child.state.dirtPositions.isEmpty()) return child;
                     frontier.add(child);
                 }
             }
