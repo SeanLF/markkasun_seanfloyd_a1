@@ -7,6 +7,14 @@ public class Coordinate {
         this.x = x;
         this.y = y;
     }
+    
+    @Override
+    public int hashCode() {
+        int hash = 17;
+        hash = ((hash + x) << 5) - (hash + x);
+        hash = ((hash + y) << 5) - (hash + y);
+        return hash;
+    }
 
     @Override
     public boolean equals(Object o)
