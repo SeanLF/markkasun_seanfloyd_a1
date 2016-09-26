@@ -1,17 +1,14 @@
 package markkasun_seanfloyd_a1;
 
-import java.util.Set;
-import java.util.HashSet;
 import markkasun_seanfloyd_a1.State;
-import markkasun_seanfloyd_a1.RobotApp.Actions;
 
 public class Node {
-    final State state;
-    final Actions action;
-    final int actionCost;
-    final Node previousNode;
+    private State state;
+    private String action;
+    private int actionCost;
+    private Node previousNode;
 
-    public Node(State state, Actions action, int actionCost, Node previousNode) {
+    public Node(State state, String action, int actionCost, Node previousNode) {
         this.state = state;
         this.action = action;
         this.actionCost = actionCost;
@@ -28,5 +25,21 @@ public class Node {
         }
 
         return false;
+    }
+    
+    public State getState() {
+        return state;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public int getActionCost() {
+        return actionCost;
+    }
+
+    public Node getPreviousNode() {
+        return previousNode;
     }
 }
