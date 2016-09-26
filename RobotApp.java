@@ -47,33 +47,32 @@ public class RobotApp {
         Coordinate robotPosition = INITIAL_ROBOT_POSITION;
         Orientation robotOrientation = INITIAL_ROBOT_ORIENTATION;
 
-        Grid grid = generateGrid(null, gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        State grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         ArrayList<String> solution = search(searchType, grid);
         printSolution(solution);
     }
 
-    private static Grid generateGrid(
-            Grid parent,
+    private static State generateGrid(
             int gridSize,
             Set<Coordinate> obstaclePositions,
             HashSet<Coordinate> dirtPositions,
             Coordinate robotPosition,
             Orientation robotOrientation) {
         //TODO: Refactor Grid into state with parent and remove parent from grid
-        return new Grid(parent, gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        return new State(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 
-    private static ArrayList<String> search(int searchType, Grid grid) {
+    private static ArrayList<String> search(int searchType, State initialState) {
         ArrayList<String> solution;
         switch (searchType) {
           case 2:
-            solution = breadthFirstSearch(grid);
+            solution = breadthFirstSearch(initialState);
             break;
           case 3:
-            solution = aStarSearch(grid);
+            solution = aStarSearch(initialState);
             break;
           default:
-            solution = depthFirstSearch(grid);
+            solution = depthFirstSearch(initialState);
         }
         return solution;
     }
@@ -84,15 +83,15 @@ public class RobotApp {
         }
     }
 
-    private static ArrayList<String> depthFirstSearch(Grid grid) {
+    private static ArrayList<String> depthFirstSearch(State initialState) {
       return new ArrayList<String>();
     }
 
-    private static ArrayList<String> breadthFirstSearch(Grid grid) {
-        ArrayList<Grid> explored = new ArrayList<Grid>();
-        Queue<Grid> frontier = new LinkedList<Grid>();
-        frontier.add(grid);
-        Grid node;
+    private static ArrayList<String> breadthFirstSearch(State initialState) {
+        ArrayList<State> explored = new ArrayList<State>();
+        Queue<State> frontier = new LinkedList<State>();
+        frontier.add(initialState);
+        State node;
 
         while (true) {
             if (frontier.isEmpty()) break;
@@ -100,7 +99,7 @@ public class RobotApp {
             explored.add(node);
             for (Actions action : actionArray) {
                 if (!isActionPossible(node, action)) continue;
-                Grid child = generateChildNode(node, action);
+                State child = generateChildNode(node, action);
                 if (!frontier.contains(child) && !explored.contains(child)) {
                     if (child.dirtPositions.isEmpty()) return null; //TODO: Must return valid solution shite
                     frontier.add(child);
@@ -111,7 +110,11 @@ public class RobotApp {
       return new ArrayList<String>();
     }
 
-    private static boolean isActionPossible(Grid node, Actions action) {
+    private static ArrayList<String> aStarSearch(State initialState) {
+      return new ArrayList<String>();
+    }
+
+    private static boolean isActionPossible(State node, Actions action) {
         switch (action) {
         case SUCK:
             return node.dirtPositions.contains(node.robotPosition);
@@ -132,7 +135,7 @@ public class RobotApp {
     }
 
     @SuppressWarnings("unchecked")
-    private static Grid generateChildNode(Grid parent, Actions action) {
+    private static State generateChildNode(State parent, Actions action) {
         HashSet<Coordinate> dirtPositions = parent.dirtPositions;
         Coordinate robotPosition = parent.robotPosition;
         Orientation robotOrientation = parent.robotOrientation;
@@ -164,11 +167,6 @@ public class RobotApp {
                 robotOrientation = Orientation.WEST;
             }
         }
-        return new Grid(
-                parent, parent.gridSize, parent.obstaclePositions, dirtPositions, robotPosition, robotOrientation);
-    }
-
-    private static ArrayList<String> aStarSearch(Grid grid) {
-      return new ArrayList<String>();
+        return new State(parent.gridSize, parent.obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 }

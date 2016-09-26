@@ -4,17 +4,14 @@ import java.util.Set;
 import java.util.HashSet;
 import markkasun_seanfloyd_a1.RobotApp.Orientation;
 
-public class Grid {
-
-    final Grid parent;
+public class State {
     final int gridSize;
     final Set<Coordinate> obstaclePositions;
     final HashSet<Coordinate> dirtPositions;
     final Coordinate robotPosition;
     final Orientation robotOrientation;
 
-    public Grid(Grid parent, int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
-        this.parent = parent;
+    public State(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
         this.gridSize = gridSize;
         this.obstaclePositions = obstaclePositions;
         this.dirtPositions = dirtPositions;
@@ -25,14 +22,14 @@ public class Grid {
     @Override
     public boolean equals(Object o)
     {
-        if (o instanceof Grid)
+        if (o instanceof State)
         {
-          Grid grid = (Grid) o;
-          if (this.gridSize == grid.gridSize
-                  && this.obstaclePositions.equals(grid.obstaclePositions)
-                  && this.dirtPositions.equals(grid.dirtPositions)
-                  && this.robotPosition.equals(grid.robotPosition)
-                  && this.robotOrientation.equals(grid.robotOrientation))
+          State state = (State) o;
+          if (this.gridSize == state.gridSize
+                  && this.obstaclePositions.equals(state.obstaclePositions)
+                  && this.dirtPositions.equals(state.dirtPositions)
+                  && this.robotPosition.equals(state.robotPosition)
+                  && this.robotOrientation.equals(state.robotOrientation))
              return true;
         }
         return false;
