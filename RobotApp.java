@@ -8,39 +8,44 @@ import java.util.ArrayList;
 
 public class RobotApp {
 
-    /*
-     * ARGS
-     * 1: Size of grid (one number)
-     */
-
-    private static final int DEFAULT_GRID_SIZE = 4, DEFAULT_SEARCH_TYPE = 1;
-    private static final Coordinate DEFAULT_ROBOT_POSITION = new Coordinate(4, 3);
-    private static final Orientation DEFAULT_ROBOT_ORIENTATION = Orientation.WEST;
+    public enum Orientation { NORTH, EAST, SOUTH, WEST }
+    public enum Actions { SUCK, MOVE, RIGHT, LEFT }
     public static final Actions[] actionArray = {Actions.SUCK, Actions.MOVE, Actions.RIGHT, Actions.LEFT};
 
-    public static void main(String[] args) {
-        int gridSize, searchType;
-        Set<Coordinate> obstaclePositions;
-        HashSet<Coordinate> dirtPositions;
-        Coordinate robotPosition;
-        Orientation robotOrientation;
+    /* ----- BEGIN -------
+    Modify these to modify the grid parameters */
+    private static final int GRID_SIZE = 4,
+                             SEARCH_TYPE = 1;
+    private static final Coordinate INITIAL_ROBOT_POSITION = new Coordinate(4, 3);
+    private static final Orientation INITIAL_ROBOT_ORIENTATION = Orientation.WEST;
 
-        if (args.length == 0) {
-            gridSize = DEFAULT_GRID_SIZE;
-            searchType = DEFAULT_SEARCH_TYPE;
-            obstaclePositions = generateDefaultObstaclePositions();
-            dirtPositions = generateDefaultDirtPositions();
-            robotPosition = DEFAULT_ROBOT_POSITION;
-            robotOrientation = DEFAULT_ROBOT_ORIENTATION;
-        } else {
-            gridSize = Integer.parseInt(args[0]);
-            searchType = Integer.parseInt(args[1]);
-            //TODO: Implement command line parsing;
-            obstaclePositions = generateDefaultObstaclePositions();
-            dirtPositions = generateDefaultDirtPositions();
-            robotPosition = DEFAULT_ROBOT_POSITION;
-            robotOrientation = DEFAULT_ROBOT_ORIENTATION;
-        }
+    private static HashSet<Coordinate> generateObstaclePositions() {
+        HashSet<Coordinate> result = new HashSet<Coordinate>();
+        result.add(new Coordinate(2,2));
+        result.add(new Coordinate(2,3));
+        result.add(new Coordinate(3,2));
+
+        return result;
+    }
+
+    private static HashSet<Coordinate> generateDirtPositions() {
+        HashSet<Coordinate> result = new HashSet<Coordinate>();
+        result.add(new Coordinate(2,1));
+        result.add(new Coordinate(1,2));
+        result.add(new Coordinate(2,4));
+        result.add(new Coordinate(3,3));
+
+        return result;
+    }
+    /*------ END ------*/
+
+    public static void main(String[] args) {
+        int gridSize = GRID_SIZE,
+            searchType = SEARCH_TYPE;
+        Set<Coordinate> obstaclePositions = generateObstaclePositions();
+        HashSet<Coordinate> dirtPositions = generateDirtPositions();
+        Coordinate robotPosition = INITIAL_ROBOT_POSITION;
+        Orientation robotOrientation = INITIAL_ROBOT_ORIENTATION;
 
         Grid grid = generateGrid(null, gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         ArrayList<String> solution = search(searchType, grid);
@@ -173,94 +178,5 @@ public class RobotApp {
 
     private static ArrayList<String> aStarSearch(Grid grid) {
       return new ArrayList<String>();
-    }
-
-    public static class Grid {
-
-        Grid parent;
-        int gridSize;
-        Set<Coordinate> obstaclePositions;
-        HashSet<Coordinate> dirtPositions;
-        Coordinate robotPosition;
-        Orientation robotOrientation;
-
-        public Grid(
-                Grid parent,
-                int gridSize,
-                Set<Coordinate> obstaclePositions,
-                HashSet<Coordinate> dirtPositions,
-                Coordinate robotPosition,
-                Orientation robotOrientation) {
-            this.parent = parent;
-            this.gridSize = gridSize;
-            this.obstaclePositions = obstaclePositions;
-            this.dirtPositions = dirtPositions;
-            this.robotPosition = robotPosition;
-            this.robotOrientation = robotOrientation;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (o instanceof Grid)
-            {
-              Grid grid = (Grid) o;
-              if (this.gridSize == grid.gridSize
-                      && this.obstaclePositions.equals(grid.obstaclePositions)
-                      && this.dirtPositions.equals(grid.dirtPositions)
-                      && this.robotPosition.equals(grid.robotPosition)
-                      && this.robotOrientation.equals(grid.robotOrientation))
-                 return true;
-            }
-            return false;
-        }
-    }
-
-    public static class Coordinate {
-        public final int x;
-        public final int y;
-        public Coordinate(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (o instanceof Coordinate)
-            {
-              Coordinate coord = (Coordinate) o;
-              if (this.x == coord.x && this.y == coord.y)
-                 return true;
-            }
-            return false;
-        }
-    }
-
-    public enum Orientation {
-        NORTH, EAST, SOUTH, WEST
-    }
-
-    public enum Actions {
-        SUCK, MOVE, RIGHT, LEFT
-    }
-
-    private static HashSet<Coordinate> generateDefaultObstaclePositions() {
-        HashSet<Coordinate> result = new HashSet<Coordinate>();
-        result.add(new Coordinate(2,2));
-        result.add(new Coordinate(2,3));
-        result.add(new Coordinate(3,2));
-
-        return result;
-    }
-
-    private static HashSet<Coordinate> generateDefaultDirtPositions() {
-        HashSet<Coordinate> result = new HashSet<Coordinate>();
-        result.add(new Coordinate(2,1));
-        result.add(new Coordinate(1,2));
-        result.add(new Coordinate(2,4));
-        result.add(new Coordinate(3,3));
-
-        return result;
     }
 }
