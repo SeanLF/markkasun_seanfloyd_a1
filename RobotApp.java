@@ -53,29 +53,17 @@ public class RobotApp {
         printSolution(null);
     }
 
-    private static State generateGrid(
-            int gridSize,
-            Set<Coordinate> obstaclePositions,
-            HashSet<Coordinate> dirtPositions,
-            Coordinate robotPosition,
-            Orientation robotOrientation) {
-        //TODO: Refactor Grid into state with parent and remove parent from grid
+    private static State generateGrid(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
         return new State(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 
     private static Node search(int searchType, Node initialNode) {
-        Node solution;
         switch (searchType) {
-          case 2:
-            solution = breadthFirstSearch(initialNode);
-            break;
-          case 3:
-            solution = aStarSearch(initialNode);
-            break;
           default:
-            solution = depthFirstSearch(initialNode);
+          case 1: return depthFirstSearch(initialNode);
+          case 2: return breadthFirstSearch(initialNode);
+          case 3: return aStarSearch(initialNode);
         }
-        return solution;
     }
 
     private static void printSolution(ArrayList<String> solution){
