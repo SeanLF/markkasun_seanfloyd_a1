@@ -16,7 +16,7 @@ public class RobotApp {
     /* ----- BEGIN -------
     Modify these to modify the grid parameters */
     private static final int GRID_SIZE = 4,
-                             SEARCH_TYPE = 1;
+                             SEARCH_TYPE = 2;
     private static final Coordinate INITIAL_ROBOT_POSITION = new Coordinate(4, 3);
     private static final Orientation INITIAL_ROBOT_ORIENTATION = Orientation.WEST;
 
@@ -102,6 +102,7 @@ public class RobotApp {
         solutionString.addLast(String.format("total cost: %d", cumulativeCost));
         solutionString.addLast(String.format("Depth: %d", depth));
       }
+      return solutionString;
     }
 
     private static Node depthFirstSearch(Node initialNode) {
