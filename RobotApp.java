@@ -2,6 +2,8 @@ package markkasun_seanfloyd_a1;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Stack;
+import java.util.Collections;
 import java.util.Queue;
 import java.util.Set;
 import java.util.HashSet;
@@ -74,7 +76,32 @@ public class RobotApp {
     }
 
     private static Node depthFirstSearch(Problem problem) {
-      return null;
+        Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
+        if (problem.goalTest(initialNode.getState())) return initialNode;
+        ArrayList<Node> explored = new ArrayList<Node>();
+        Stack<Node> frontier = new Stack<Node>();
+        frontier.add(initialNode);
+        Node node;
+
+        while (!frontier.isEmpty()) {
+            node = frontier.pop();
+            explored.add(node);
+
+            // reverse action order since we're using a stack to store them
+            ArrayList<String> actions = problem.getActions(node.getState());
+            Collections.reverse(actions);
+
+            for (String action : actions) {
+                Node child = problem.generateChildNode(node, action);
+                if (!frontier.contains(child) && !explored.contains(child)) {
+                    if (problem.goalTest(child.getState())) return child;
+                    frontier.add(child);
+                }
+            }
+        }
+
+        // Solution not found
+        return null;
     }
 
     private static Node breadthFirstSearch(Problem problem) {
@@ -96,8 +123,9 @@ public class RobotApp {
                 }
             }
         }
-      //TODO: Do something more elegant when failing to find solution. Exception?
-      return null;
+
+        // Solution not found
+        return null;
     }
 
     private static Node aStarSearch(Problem problem) {
