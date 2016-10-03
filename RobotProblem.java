@@ -6,12 +6,13 @@ import java.util.LinkedList;
 
 import markkasun_seanfloyd_a1.RobotApp.Orientation;
 
-public class RobotProblem extends Problem {
+public class RobotProblem implements Problem {
 
     private static String[] actions = {"SUCK", "MOVE", "RIGHT", "LEFT"};
+    private Grid grid;
 
-    public RobotProblem(State initialState) {
-        super(initialState);
+    public RobotProblem(Grid grid) {
+        this.grid = grid;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class RobotProblem extends Problem {
         return resultArray;
     }
 
-    private static boolean isActionPossible(RobotState node, String action) {
+    private boolean isActionPossible(RobotState node, String action) {
         if (action == "SUCK") {
             return node.getDirtPositions().contains(node.getRobotPosition());
         } else if (action == "MOVE") {
@@ -50,9 +51,9 @@ public class RobotProblem extends Problem {
             case SOUTH: targetNodeCoord = new Coordinate(node.getRobotPosition().x, node.getRobotPosition().y + 1);break;
             case WEST: targetNodeCoord = new Coordinate(node.getRobotPosition().x - 1, node.getRobotPosition().y);break;
             }
-            boolean isWithinBounds = targetNodeCoord.x > 0 && targetNodeCoord.x <= node.getGridSize()
-                    && targetNodeCoord.y > 0 && targetNodeCoord.y <= node.getGridSize();
-                    return isWithinBounds && !node.getObstaclePositions().contains(targetNodeCoord);
+            boolean isWithinBounds = targetNodeCoord.x > 0 && targetNodeCoord.x <= grid.getGridSize()
+                    && targetNodeCoord.y > 0 && targetNodeCoord.y <= grid.getGridSize();
+                    return isWithinBounds && !grid.getObstaclePositions().contains(targetNodeCoord);
         } else if (action == "RIGHT" || action == "LEFT"){
             return true;
         } else {
@@ -102,7 +103,7 @@ public class RobotProblem extends Problem {
                 robotOrientation = Orientation.WEST;
             }
         }
-        RobotState newState = new RobotState(parentState.getGridSize(), parentState.getObstaclePositions(), dirtPositions, robotPosition, robotOrientation);
+        RobotState newState = new RobotState(dirtPositions, robotPosition, robotOrientation);
         return new Node(newState, action, actionCost, parent);
     }
     
@@ -141,4 +142,9 @@ public class RobotProblem extends Problem {
           }
           return solutionString;
       }
+
+    @Override
+    public State getInitialState() {
+        return grid.getInitialState();
+    }
 }

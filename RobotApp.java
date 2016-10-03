@@ -48,14 +48,15 @@ public class RobotApp {
         Coordinate robotPosition = INITIAL_ROBOT_POSITION;
         Orientation robotOrientation = INITIAL_ROBOT_ORIENTATION;
 
-        State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
-        Problem problem = new RobotProblem(initialState);
+        //State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        Grid grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+        RobotProblem problem = new RobotProblem(grid);
         Node solution = search(searchType, problem);
         printSolution(solution);
     }
 
-    private static RobotState generateGrid(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
-        return new RobotState(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
+    private static Grid generateGrid(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {
+        return new Grid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
     }
 
     private static Node search(int searchType, Problem problem) {

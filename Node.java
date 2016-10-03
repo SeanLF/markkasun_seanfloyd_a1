@@ -1,7 +1,5 @@
 package markkasun_seanfloyd_a1;
 
-import markkasun_seanfloyd_a1.State;
-
 public class Node {
     private State state;
     private String action;
