@@ -51,8 +51,11 @@ public class RobotApp {
         //State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         Grid grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         RobotProblem problem = new RobotProblem(grid);
+        long startTime = System.currentTimeMillis();
         Node solution = search(searchType, problem);
+        long endTime = System.currentTimeMillis();
         printSolution(solution);
+        System.out.println("Time : " + (endTime - startTime) + " ms");
     }
 
     private static Grid generateGrid(int gridSize, Set<Coordinate> obstaclePositions, HashSet<Coordinate> dirtPositions, Coordinate robotPosition, Orientation robotOrientation) {

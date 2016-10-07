@@ -135,7 +135,7 @@ public class RobotProblem implements Problem {
           if(solutionString.size() == 0) {
             solutionString.add("No solution found :(");
           } else {
-            depth = solutionString.size();
+            depth = solutionString.size()-1; // Exclude root node from depth count
             solutionString.addLast("");
             solutionString.addLast(String.format("total cost: %d", cumulativeCost));
             solutionString.addLast(String.format("Depth: %d", depth));
