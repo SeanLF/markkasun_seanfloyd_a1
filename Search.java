@@ -63,31 +63,23 @@ public class Search {
 
     public static Node aStarSearch(Problem problem) {
         Node initialNode = problem.getInitialNode();
-        return aStarSearchRecursive(problem, initialNode, Integer.MAX_VALUE);
-    }
+        if (problem.goalTest(initialNode.getState())) return initialNode;
+        initialNode.setfCost(0);
+        Queue<Node> frontier = new PriorityQueue<Node>(4, new NodeComparator());
+        frontier.add(initialNode);
+        Node node;
 
-    private static Node aStarSearchRecursive(Problem problem, Node node, int f_limit) {
-        if (problem.goalTest(node.getState())) return node;
-        PriorityQueue<Node> successors = new PriorityQueue<Node>(4, new NodeComparator());
-        for (String action : problem.getActions(node.getState())) {
-            Node child = problem.generateChildNode(node, action);
-            child.setfCost(Integer.max(child.getPathCost() + child.heuristicCost(), node.getfCost()));
-            successors.add(child);
-        }
-        while (!successors.isEmpty()) {
-            Node best = successors.poll();
-            if (best.getfCost() > f_limit) return best; //Supposed to return failure here..
-            int alternative;
-            if (!successors.isEmpty()) {
-                alternative = successors.peek().getfCost();
-            } else {
-                alternative = best.getfCost();
+        while (!frontier.isEmpty()) {
+            node = frontier.poll();
+            for (String action : problem.getActions(node.getState())) {
+                Node child = problem.generateChildNode(node, action);
+                if (problem.goalTest(child.getState())) return child;
+                child.setfCost(child.getPathCost() + child.heuristicCost());
+                frontier.add(child);
             }
-            Node result = aStarSearchRecursive(problem, best, Integer.min(f_limit, alternative));
-            best.setfCost(result.getfCost());
-            successors.add(best);
-            if (problem.goalTest(result.getState())) return result;
         }
+
+        // Solution not found
         return null;
-    }
+      }
 }
