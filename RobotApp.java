@@ -17,15 +17,15 @@ public class RobotApp {
     /* ----- BEGIN -------
     Modify these to modify the grid parameters */
     private static final int GRID_SIZE = 3,
-                             SEARCH_TYPE = 4;
+                             SEARCH_TYPE = 3;
     private static final Coordinate INITIAL_ROBOT_POSITION = new Coordinate(4, 3);
     private static final Orientation INITIAL_ROBOT_ORIENTATION = Orientation.WEST;
 
     private static HashSet<Coordinate> generateObstaclePositions() {
         HashSet<Coordinate> result = new HashSet<Coordinate>();
         result.add(new Coordinate(2,2));
-        //result.add(new Coordinate(2,3));
-        //result.add(new Coordinate(3,2));
+        result.add(new Coordinate(2,3));
+        result.add(new Coordinate(3,2));
 
         return result;
     }
@@ -34,8 +34,8 @@ public class RobotApp {
         HashSet<Coordinate> result = new HashSet<Coordinate>();
         result.add(new Coordinate(2,1));
         result.add(new Coordinate(1,2));
-        //result.add(new Coordinate(2,4));
-        //result.add(new Coordinate(3,3));
+        result.add(new Coordinate(2,4));
+        result.add(new Coordinate(3,3));
 
         return result;
     }
@@ -49,7 +49,6 @@ public class RobotApp {
         Coordinate robotPosition = INITIAL_ROBOT_POSITION;
         Orientation robotOrientation = INITIAL_ROBOT_ORIENTATION;
 
-        //State initialState = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         Grid grid = generateGrid(gridSize, obstaclePositions, dirtPositions, robotPosition, robotOrientation);
         RobotProblem problem = new RobotProblem(grid);
         long startTime = System.currentTimeMillis();
@@ -69,7 +68,6 @@ public class RobotApp {
           case 1: return depthFirstSearch(problem);
           case 2: return breadthFirstSearch(problem);
           case 3: return aStarSearch(problem);
-          case 4: return uniSearch(problem);
         }
     }
 
@@ -134,32 +132,6 @@ public class RobotApp {
         return null;
     }
 
-    private static Node uniSearch(Problem problem) {
-        Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
-        if (problem.goalTest(initialNode.getState())) return initialNode;
-        //ArrayList<Node> explored = new ArrayList<Node>();
-        Queue<Node> frontier = new PriorityQueue<Node>(4, new NodeComparator());
-        initialNode.setfCost(initialNode.heuristicCost());
-        frontier.add(initialNode);
-        Node node;
-
-        while (!frontier.isEmpty()) {
-            node = frontier.poll();
-            //explored.add(node);
-            for (String action : problem.getActions(node.getState())) {
-                Node child = problem.generateChildNode(node, action);
-                //if (!frontier.contains(child) && !explored.contains(child)) {
-                    if (problem.goalTest(child.getState())) return child;
-                    child.setfCost(Integer.max(child.getPathCost() + child.getfCost(), node.getfCost()));
-                    frontier.add(child);
-                //}
-            }
-        }
-
-        // Solution not found
-        return null;
-      }
-
     private static Node aStarSearch(Problem problem) {
         Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
         return aStarSearchRecursive(problem, initialNode, Integer.MAX_VALUE);
@@ -173,10 +145,6 @@ public class RobotApp {
             child.setfCost(Integer.max(child.getPathCost() + child.heuristicCost(), node.getfCost()));
             successors.add(child);
         }
-        //        if (successors.isEmpty()) return null;
-        //        for (Node s : successors) { /* update f with value from previous search, if any */
-        //            s.setfCost(Integer.max(s.getPathCost() + s.getfCost(), node.getfCost()));
-        //        }
         while (!successors.isEmpty()) {
             Node best = successors.poll();
             if (best.getfCost() > f_limit) return best; //Supposed to return failure here..
@@ -184,7 +152,7 @@ public class RobotApp {
             if (!successors.isEmpty()) {
                 alternative = successors.peek().getfCost();
             } else {
-                alternative = best.getfCost(); // Hack to stop issues when there's no alternative left..
+                alternative = best.getfCost();
             }
             Node result = aStarSearchRecursive(problem, best, Integer.min(f_limit, alternative));
             best.setfCost(result.getfCost());

@@ -15,7 +15,17 @@ public class Node {
     }
 
     public int heuristicCost() {
-        return 0;
+        if (!(state instanceof RobotState))
+        {
+            return 0;
+        }
+        RobotState rState = (RobotState) state;
+        int lowestDistance = Integer.MAX_VALUE;
+        for (Coordinate i : rState.getDirtPositions()) {
+            int distance = Math.abs(rState.getRobotPosition().x - i.x) + Math.abs(rState.getRobotPosition().y - i.y);
+            if (distance < lowestDistance) lowestDistance = distance;
+        }
+        return lowestDistance*50;
     }
 
     @Override
