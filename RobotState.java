@@ -1,7 +1,6 @@
 package markkasun_seanfloyd_a1;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import markkasun_seanfloyd_a1.RobotApp.Orientation;
 
