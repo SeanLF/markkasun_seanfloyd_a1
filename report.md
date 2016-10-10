@@ -26,11 +26,11 @@ Sean Floyd - 6778524
 
   We can formulate that as the sum of:
   - (cost of moving + cost of sucking) * (instances of dirt remaining - 1)
-  - (manhattan distance from the robot to the closest dirt) * (cost of moving + cost of sucking)
+  - (manhattan distance from the robot to the closest dirt) * (cost of moving) + cost of sucking)
 
   This results in the following formula:
   ```java
-  h = 60*(manhattan_distance(robot, closest_dirt) + dirt_remaining - 1)
+  h = 60*(dirt_remaining - 1) + manhattan_distance(robot, closest_dirt) * 50 + 10
   ```
 
 5. Describe the environment properties. Justify your answers.
@@ -49,17 +49,18 @@ Sean Floyd - 6778524
   The grid is represented by the following:
     - an integer to represent the grid size (we are told the grid is square)
     - a (custom class) RobotState object which contains the positions of the robot and dirty tiles as well as the orientation of the robot.
+    - a Set of Coordinate to represent the list of obstacle coordinates.
 
 2. How do you represent the dirt and obstacles?
 
-  We created a coordinate object which contains an [x,y] pair. The dirt and obstacles are both represented by distinct HashSets of Coordinate.
+  We created a coordinate object which contains an (x,y) pair. The dirt and obstacles are both represented by distinct HashSets of Coordinate.
 
 3. How do you represent a state in your implementation? (note that this is different from the Q1 in general questions)
 
   The RobotState class models the state. It contains:
     - a variable for the dirt positions (HashSet of Coordinate)
     - a variable of type Coordinate to represent the robot's coordinates.
-    - a string that represents the robot orientation.
+    - an enum that represents the robot orientation.
 
 ## Code description
  > Provide a brief description of your implementation and the classes in your various packages.
