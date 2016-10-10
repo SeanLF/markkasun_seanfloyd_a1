@@ -72,14 +72,14 @@ public class RobotProblem implements Problem {
         HashSet<Coordinate> dirtPositions = parentState.getDirtPositions();
         Coordinate robotPosition = parentState.getRobotPosition();
         Orientation robotOrientation = parentState.getRobotOrientation();
-        int actionCost = 0;
+        int pathCost = parent.getPathCost();
 
         if (action == "SUCK") {
             dirtPositions = (HashSet<Coordinate>)parentState.getDirtPositions().clone();
             dirtPositions.remove(parentState.getRobotPosition());
-            actionCost = 10;
+            pathCost += 10;
         } else if (action == "MOVE") {
-            actionCost = 50;
+            pathCost += 50;
             switch (parentState.getRobotOrientation()) {
             case NORTH: robotPosition = new Coordinate(parentState.getRobotPosition().x, parentState.getRobotPosition().y - 1);break;
             case EAST: robotPosition = new Coordinate(parentState.getRobotPosition().x + 1, parentState.getRobotPosition().y);break;
@@ -88,7 +88,7 @@ public class RobotProblem implements Problem {
             }
         }
         else if (action == "RIGHT" || action == "LEFT") {
-            actionCost = 20;
+            pathCost += 20;
             if ((robotOrientation == Orientation.WEST && action == "RIGHT")
                     || (robotOrientation == Orientation.EAST && action == "LEFT")) {
                 robotOrientation = Orientation.NORTH;
@@ -104,7 +104,7 @@ public class RobotProblem implements Problem {
             }
         }
         RobotState newState = new RobotState(dirtPositions, robotPosition, robotOrientation);
-        return new Node(newState, action, actionCost, parent);
+        return new Node(newState, action, pathCost, parent);
     }
     
     public static LinkedList<String> generateSolutionString(Node solutionNode) {
@@ -114,11 +114,12 @@ public class RobotProblem implements Problem {
         }
         RobotState rState;
         LinkedList<String> solutionString = new LinkedList<String>();
-        int cumulativeCost = 0, depth = 0;
+        int cumulativeCost = solutionNode.getPathCost();
+        int depth = 0;
 
         while(solutionNode != null) {
             rState = (RobotState)solutionNode.getState();
-            cumulativeCost += solutionNode.getActionCost();
+            //cumulativeCost += solutionNode.getPathCost();
             solutionString.addFirst(
               String.format(
                 "pos(%d, %d), %s, %s",

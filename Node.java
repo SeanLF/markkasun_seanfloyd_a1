@@ -3,14 +3,14 @@ package markkasun_seanfloyd_a1;
 public class Node {
     private State state;
     private String action;
-    private int actionCost;
+    private int pathCost;
     private Node previousNode;
     private int fCost;
 
-    public Node(State state, String action, int actionCost, Node previousNode) {
+    public Node(State state, String action, int pathCost, Node previousNode) {
         this.state = state;
         this.action = action;
-        this.actionCost = actionCost;
+        this.pathCost = pathCost;
         this.previousNode = previousNode;
     }
 
@@ -38,8 +38,8 @@ public class Node {
         return action;
     }
 
-    public int getActionCost() {
-        return actionCost;
+    public int getPathCost() {
+        return pathCost;
     }
 
     public Node getPreviousNode() {
