@@ -5,12 +5,17 @@ public class Node {
     private String action;
     private int actionCost;
     private Node previousNode;
+    private int fCost;
 
     public Node(State state, String action, int actionCost, Node previousNode) {
         this.state = state;
         this.action = action;
         this.actionCost = actionCost;
         this.previousNode = previousNode;
+    }
+
+    public int heuristicCost() {
+        return 0;
     }
 
     @Override
@@ -39,5 +44,13 @@ public class Node {
 
     public Node getPreviousNode() {
         return previousNode;
+    }
+
+    public int getfCost() {
+        return fCost;
+    }
+
+    public void setfCost(int fCost) {
+        this.fCost = fCost;
     }
 }
