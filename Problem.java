@@ -10,6 +10,6 @@ public interface Problem {
     
     public abstract Node generateChildNode(Node parent, String action);
 
-    public abstract State getInitialState();
+    public abstract Node getInitialNode();
 
 }

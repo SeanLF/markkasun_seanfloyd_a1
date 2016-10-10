@@ -16,8 +16,8 @@ public class RobotApp {
 
     /* ----- BEGIN -------
     Modify these to modify the grid parameters */
-    private static final int GRID_SIZE = 3,
-                             SEARCH_TYPE = 3;
+    private static final int GRID_SIZE = 4,
+                             SEARCH_TYPE = 2;
     private static final Coordinate INITIAL_ROBOT_POSITION = new Coordinate(4, 3);
     private static final Orientation INITIAL_ROBOT_ORIENTATION = Orientation.WEST;
 
@@ -80,7 +80,7 @@ public class RobotApp {
     }
 
     private static Node depthFirstSearch(Problem problem) {
-        Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
+        Node initialNode = problem.getInitialNode();
         if (problem.goalTest(initialNode.getState())) return initialNode;
         ArrayList<Node> explored = new ArrayList<Node>();
         Stack<Node> frontier = new Stack<Node>();
@@ -109,7 +109,7 @@ public class RobotApp {
     }
 
     private static Node breadthFirstSearch(Problem problem) {
-        Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
+        Node initialNode = problem.getInitialNode();
         if (problem.goalTest(initialNode.getState())) return initialNode;
         ArrayList<Node> explored = new ArrayList<Node>();
         Queue<Node> frontier = new LinkedList<Node>();
@@ -133,7 +133,7 @@ public class RobotApp {
     }
 
     private static Node aStarSearch(Problem problem) {
-        Node initialNode = new Node(problem.getInitialState(), "START", 0, null);
+        Node initialNode = problem.getInitialNode();
         return aStarSearchRecursive(problem, initialNode, Integer.MAX_VALUE);
     }
 

@@ -104,7 +104,7 @@ public class RobotProblem implements Problem {
             }
         }
         RobotState newState = new RobotState(dirtPositions, robotPosition, robotOrientation);
-        return new Node(newState, action, pathCost, parent);
+        return new RobotNode(newState, action, pathCost, parent);
     }
     
     public static LinkedList<String> generateSolutionString(Node solutionNode) {
@@ -145,7 +145,7 @@ public class RobotProblem implements Problem {
       }
 
     @Override
-    public State getInitialState() {
-        return grid.getInitialState();
+    public Node getInitialNode() {
+        return new RobotNode(grid.getInitialState(), "START", 0, null);
     }
 }
