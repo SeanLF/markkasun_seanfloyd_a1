@@ -26,7 +26,7 @@ Sean Floyd - 6778524
 
   We can formulate that as the sum of:
   - (cost of moving + cost of sucking) * (instances of dirt remaining - 1)
-  - (manhattan distance from the robot to the closest dirt) * (cost of moving) + cost of sucking)
+  - (manhattan distance from the robot to the closest dirt) * (cost of moving) + cost of sucking
 
   This results in the following formula:
   ```java
